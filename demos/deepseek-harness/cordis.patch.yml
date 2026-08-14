@@ -1,0 +1,25 @@
+# cordis.patch.yml —— deepseek-harness (dsh) 最小 patch 示例
+#
+# 核心抽象：dsh 的运行实例是一棵 Cordis 插件树，patch 是"按行 id 整行替换
+# 或插入"的配置覆盖层。层级顺序：bundle patch -> profile cordis.patch.yml ->
+# $DSH_HOME/cordis.patch.yml -> --patch 覆盖，后层赢。
+#
+# 用法（在 dsh 源码 checkout 中，插件路径须为绝对路径）:
+#   pnpm dsh web --patch /absolute/path/to/cordis.patch.yml
+#
+# 最小插件本体（另存为 hello-plugin.ts，路径填入下方 name 字段）:
+#   import type { Context } from '@deepseek-ai/cordis'
+#   export const name = 'hello-plugin'
+#   export function apply(ctx: Context) { console.log('[hello-plugin] loaded') }
+
+- insert:
+    # 向插件树插入一行：id 唯一，name 指向插件入口文件（绝对路径）
+    - id: hello
+      name: '/absolute/path/to/deepseek-harness/scratch-plugin/src/hello-plugin.ts'
+
+# 凭据引用写法（示例，注释掉避免误用）：patch 中可用 !!js 读环境变量，
+# 保证 key 只从环境变量读取、不进入版本库。
+# - replace:
+#     - id: model-deepseek
+#       config:
+#         apiKey: !!js process.env.DEEPSEEK_API_KEY
