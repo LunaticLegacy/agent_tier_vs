@@ -130,7 +130,7 @@ export default function ProjectDetail() {
             transition={{ delay: 0.3, duration: 0.6, ease: EASE }}
           >
             <span className="mono-label absolute right-4 top-4 text-ink-faint">
-              ENTRY #{entryNo}/18
+              ENTRY #{entryNo}/17
             </span>
             <div className="flex items-baseline gap-2" style={{ color: meta.color }}>
               <CountUp

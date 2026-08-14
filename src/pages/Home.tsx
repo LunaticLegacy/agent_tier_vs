@@ -21,7 +21,7 @@ import {
 const HeroParticles = lazy(() => import('@/components/home/HeroParticles'))
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
-const TERMINAL_LINE = '$ review --depth=code --repos=18 --date=2026.08'
+const TERMINAL_LINE = '$ review --depth=code --repos=17 --date=2026.08'
 
 /* ------------------------------ Hero ------------------------------ */
 
@@ -119,7 +119,7 @@ function HeroTitle() {
 }
 
 const HERO_STATS = [
-  { value: 18, label: '已评审项目' },
+  { value: 17, label: '已评审项目' },
   { value: 5, label: 'Tier' },
   { value: 6, label: '评审维度' },
   { value: 12, label: '个单人项目' },
@@ -154,7 +154,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.1, duration: 0.8, ease: EASE }}
         >
-          Clone 下来，读代码，再排名。18 个 Agent 框架，五个 Tier，不看 README 投票。
+          Clone 下来，读代码，再排名。17 个 Agent 框架，五个 Tier，不看 README 投票。
         </motion.p>
 
         <motion.div
@@ -319,7 +319,7 @@ function TierBoard() {
       <p className="mono-label text-ink-faint">02 / TIER BOARD</p>
       <h2 className="mt-2 text-3xl font-bold md:text-4xl">S → D 完整总榜</h2>
       <p className="mt-3 font-mono text-sm text-ink-faint">
-        $ git clone --depth 1 × 18 … ✓ 18/18 reviewed
+        $ git clone --depth 1 × 17 … ✓ 17/17 reviewed
       </p>
 
       <div className="mt-16 space-y-24">
@@ -477,7 +477,7 @@ function InsightsTeaser() {
 
 const TERMINAL_LINES = [
   { text: '$ methodology --show', ok: false },
-  { text: 'clone 全部 18 个仓库（非浅尝 README）', ok: true },
+  { text: 'clone 全部 17 个仓库（非浅尝 README）', ok: true },
   { text: '逐模块读代码 + 测试/CI/文档核查', ok: true },
   { text: '六维评分：架构 / 代码 / 测试CI / 文档DX / 生态 / 激进度', ok: true },
   { text: '分级裁决 → S A B C D', ok: true },

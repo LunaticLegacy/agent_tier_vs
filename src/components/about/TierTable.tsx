@@ -51,7 +51,7 @@ export default function TierTable() {
         ))}
       </motion.div>
       <p className="mt-4 font-mono text-xs text-ink-faint">
-        * 分数为门槛，裁决为评审合议；同 Tier 内排名按编号序。S 级目前空缺：受评 18
+        * 分数为门槛，裁决为评审合议；同 Tier 内排名按编号序。S 级目前空缺：受评 17
         个框架无一同时达到顶级工程与顶级生态（原 S 级 deepseek-harness
         经重新定级为 Agent 运行时产品，移入产品榜 T1）。
       </p>

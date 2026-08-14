@@ -24,7 +24,7 @@ const MAINTAINER_OPTIONS = ['全部', '官方', '小团队', '个人'] as const
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 function TypewriterLine() {
-  const text = '$ ls /wiki | wc -l → 18'
+  const text = '$ ls /wiki | wc -l → 17'
   return (
     <span className="font-mono text-sm text-ink-faint" aria-label={text}>
       {text.split('').map((ch, i) => (
@@ -99,7 +99,7 @@ export default function Wiki() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                [18 ENTRIES]
+                [17 ENTRIES]
               </motion.span>
             </div>
             <motion.p
@@ -218,7 +218,7 @@ export default function Wiki() {
           </div>
 
           <span className="ml-auto font-mono text-xs text-ink-faint">
-            显示 {filtered.length} / 18
+            显示 {filtered.length} / 17
           </span>
         </div>
       </motion.div>

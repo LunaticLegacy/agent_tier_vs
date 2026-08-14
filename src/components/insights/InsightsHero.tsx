@@ -47,7 +47,7 @@ export default function InsightsHero() {
             横向洞察
           </h1>
           <p className="insights-intro mt-6 max-w-2xl text-base leading-8 text-ink-dim md:text-lg">
-            排名是个体裁决，洞察是群体画像。以下 5 条规律，只在把 18 份代码全部读完后才会浮现。
+            排名是个体裁决，洞察是群体画像。以下 5 条规律，只在把 17 份代码全部读完后才会浮现。
           </p>
         </div>
         <pre className="insights-ascii hidden overflow-x-auto rounded border border-line bg-bg-inset p-4 font-mono text-[10px] leading-4 text-ink-faint md:block">

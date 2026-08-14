@@ -20,7 +20,7 @@ jobs:
         run: npm ci --no-audit
 
       - name: Typecheck
-        run: npx tsc -b
+        run: ./node_modules/.bin/tsc -b
 
       - name: Lint
         run: npm run lint -- --max-warnings 0

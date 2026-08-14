@@ -17,7 +17,7 @@ function AboutCta() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        评审完成度 <span className="text-tier-c">18/18 ✓</span>
+        评审完成度 <span className="text-tier-c">17/17 ✓</span>
       </motion.p>
       <div className="mt-8 flex flex-wrap justify-center gap-4">
         <motion.div

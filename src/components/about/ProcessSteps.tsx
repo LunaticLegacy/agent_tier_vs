@@ -5,7 +5,7 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const STEPS = [
   {
     cmd: 'CLONE',
-    desc: '实际 clone 全部 18 个仓库，锁定评审时点 commit。',
+    desc: '实际 clone 全部 17 个仓库，锁定评审时点 commit。',
     term: '$ git log -1 --format=%H',
   },
   {

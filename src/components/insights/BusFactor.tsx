@@ -22,10 +22,10 @@ export default function BusFactor() {
 
   useGSAP(
     () => {
-      // count-up 12/18
+      // count-up 11/17
       const counter = { v: 0 }
       gsap.to(counter, {
-        v: 12,
+        v: 11,
         duration: 1.5,
         ease: 'power2.out',
         snap: { v: 1 },
@@ -78,7 +78,7 @@ export default function BusFactor() {
             <div>
               <p className="bus-number font-mono text-7xl font-semibold tracking-tight md:text-8xl">
                 <span className="bus-count text-vs">0</span>
-                <span className="text-ink-faint">/18</span>
+                <span className="text-ink-faint">/17</span>
               </p>
               <p className="mono-label mt-4 text-ink-dim">个人项目占比</p>
             </div>

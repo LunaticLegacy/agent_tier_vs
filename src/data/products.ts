@@ -1949,6 +1949,91 @@ export const products: Product[] = [
       { name: 'Zapier Agents 官方页', url: 'https://zapier.com/agents' },
     ],
   },
+  {
+    slug: 'angelus',
+    name: 'Angelus',
+    vendor: 'LunaNeko（LunaticLegacy，个人）',
+    category: 'research',
+    tier: 'T2',
+    rank: 3,
+    tagline: '面向专业研究工作流的 Agent 轨迹追溯工作台：可观测、可恢复、可复盘',
+    model: '未确认（通过 Provider 连接器接入各家模型）',
+    pricing: '开源免费（AGPL-3.0 双许可）',
+    evaluatedAt: '2026-08',
+    verdict:
+      '基于 llmfetcher 构建的研究 Agent 工作台，轨迹追溯设计（可重放事件日志、执行图快照、任务计划持久化、interrupted 状态诚实标注）在同类产品中罕见；21 个测试文件覆盖停止持久化、事件回放等关键路径。但 2026-07-27 才创建、1 star、单人维护、零第三方使用证据，Agent 实际任务成功率完全未经外部验证；安装需 SSH 凭据拉子模块。定 T2，置信度：低。',
+    strengths: [
+      {
+        claim: '轨迹可追溯性为设计核心',
+        compare: 'Manus/Genspark 等黑盒执行产品',
+        evidence: 'events.ndjson 可重放事件日志 + graph-view.json 执行图快照，让"结论从哪来"可审计（仓库源码与 README）',
+        impact: '专业研究场景下结论可审计、过程可复盘，是黑盒产品无法提供的价值',
+        level: 'A',
+      },
+      {
+        claim: '中断语义严谨',
+        evidence: '协作式停止保存完成边界，强制停止记录终态并清理工具进程，服务丢失的运行显示 interrupted 而非谎报运行中（仓库源码）',
+        impact: '长任务场景下状态可信，恢复语义明确',
+        level: 'A',
+      },
+      {
+        claim: '本地优先数据主权',
+        evidence: 'API key 与会话保存在本机 workspace/（仓库源码）',
+        impact: '敏感研究数据不出本机',
+        level: 'A',
+      },
+    ],
+    weaknesses: [
+      {
+        claim: '零第三方验证',
+        evidence: '1 star、无独立评测、无真实任务成功率数据（GitHub API 实测）',
+        impact: '能力存在≠能力可靠，实际任务表现完全未知',
+        level: 'A',
+      },
+      {
+        claim: '底座 llmfetcher 自身存在已知缺陷',
+        evidence: '重试机制失效 bug（代码评审，见其评审条目）',
+        impact: '上层工作台的可靠性受底座缺陷直接拖累',
+        level: 'B',
+      },
+      {
+        claim: '安装门槛高',
+        evidence: '子模块使用 SSH URL 需凭据，未发布 PyPI（仓库实测）',
+        impact: 'clone 即用性差，采用成本高',
+        level: 'A',
+      },
+      {
+        claim: 'AGPL 限制商用',
+        evidence: 'AGPL-3.0 双许可（仓库 LICENSE）',
+        impact: '企业商用采用受限',
+        level: 'A',
+      },
+    ],
+    notHigher: [
+      'Agent 能力继承自 llmfetcher，而后者重试路径存在未修复 bug；无任何公开 benchmark 或真实任务证据支持更高定级',
+      '零生态零第三方采用，生产价值未验证',
+    ],
+    notLower: [
+      '轨迹追溯/可恢复设计在 T2-T3 产品中独树一帜',
+      '有真实测试覆盖（21 个测试文件），不是玩具',
+    ],
+    headToHead: [
+      {
+        opponent: 'manus',
+        myEdge: ['过程可审计（可重放事件日志 + 执行图快照）', '本地数据主权'],
+        theirEdge: ['云端开箱即用', '实际任务验证多得多', '团队维护'],
+        verdict: 'Angelus 面向需要审计轨迹的专业场景，Manus 面向直接要结果的用户。',
+      },
+    ],
+    scores: { autonomy: 5, toolUse: 5, longTask: 6, context: 6, extensibility: 4, stability: 4 },
+    keyMetrics: [
+      { label: 'Star（2026-08 实测）', value: '1', level: 'A' },
+      { label: '测试文件（仓库实测）', value: '21', level: 'A' },
+      { label: '创建时间', value: '2026-07-27', level: 'A' },
+      { label: '真实任务成功率', value: '未确认', level: 'A' },
+    ],
+    sources: [{ name: 'GitHub 仓库', url: 'https://github.com/LunaticLegacy/angelus' }],
+  },
 ]
 
 export const productTierGroups: { tier: ProductTier; items: Product[] }[] =

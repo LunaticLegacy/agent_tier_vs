@@ -13,7 +13,7 @@ export interface Project {
   slug: string
   name: string
   tier: Tier
-  rank: number // 总榜排名 1-18
+  rank: number // 总榜排名 1-17
   maintainer: string
   maintainerType: '官方' | '小团队' | '个人' | '学生项目' | '社区'
   language: string
@@ -325,41 +325,10 @@ export const projects: Project[] = [
     weaknesses: ['社区比同档小一个数量级'],
   },
   {
-    slug: 'angelus',
-    name: 'Angelus',
-    tier: 'C',
-    rank: 14,
-    maintainer: 'LunaNeko（LunaticLegacy）',
-    maintainerType: '个人',
-    language: 'Python + TypeScript',
-    license: 'AGPL-3.0 双许可',
-    stars: '1',
-    starValue: 1,
-    status: '活跃',
-    tagline: '面向专业研究工作流的 Agent 轨迹追溯工作台——让多 Agent 研究过程可观测、可恢复、可复盘',
-    score: 5.4,
-    dimensions: { architecture: 7, code: 6, testCI: 6, docs: 7, ecosystem: 1, radical: 7 },
-    quote: 'llmfetcher 的应用层答卷：TaskBus 的"原始转录永不进协调者"在这里变成了完整的工作台产品形态。',
-    highlights: [
-      '构建在 llmfetcher（git submodule 固定为基础库）之上的工作台应用而非通用框架：Web 控制台 + 会话持久化 + 可观测 Swarm + 任务计划 + 受控 Shell——不是 import 造 agent 的库，而是开箱即用的研究 Agent 工作台（分类边界案例）',
-      '轨迹追溯是一等公民：events.ndjson 可重放事件日志、graph-view.json 执行图快照、task-plan.json 任务分解，刷新/重启后可完整恢复视图，服务丢失的运行显示为 interrupted 而非谎报运行中',
-      '协作式停止保存完成边界；强制停止记录终态并清理已登记工具进程——中断语义设计严谨',
-      '测试真实覆盖关键路径：21 个测试文件，含 stop 持久化、事件回放重建、执行图持久化、连接器存储等（仓库 tests/ 实测）',
-      '本地优先：API key 与会话保存在本机 workspace/，不写入 Git',
-    ],
-    weaknesses: [
-      '极早期：2026-07-27 创建，仅 1 star、单人维护，无任何第三方使用证据',
-      '安装门槛：子模块用 SSH URL，需要可访问 GitHub 的 SSH 凭据，clone 即用性差',
-      '与 llmfetcher 强绑定（submodule），独立性弱；AGPL 许可证限制商用采用',
-      '实验性 TLB RAG 尚未验证有效性',
-    ],
-    repoUrl: 'https://github.com/LunaticLegacy/angelus',
-  },
-  {
     slug: 'turn',
     name: 'Turn',
     tier: 'D',
-    rank: 15,
+    rank: 14,
     maintainer: '个人 + arXiv 论文',
     maintainerType: '个人',
     language: 'TypeScript',
@@ -381,7 +350,7 @@ export const projects: Project[] = [
     slug: 'compileagent',
     name: 'CompileAgent',
     tier: 'D',
-    rank: 16,
+    rank: 15,
     maintainer: '个人',
     maintainerType: '个人',
     language: 'TypeScript',
@@ -400,7 +369,7 @@ export const projects: Project[] = [
     slug: 'atlas',
     name: 'Atlas',
     tier: 'D',
-    rank: 17,
+    rank: 16,
     maintainer: '个人',
     maintainerType: '个人',
     language: 'Python',
@@ -419,7 +388,7 @@ export const projects: Project[] = [
     slug: 'micro-agent',
     name: 'micro-agent',
     tier: 'D',
-    rank: 18,
+    rank: 17,
     maintainer: 'BuilderIO',
     maintainerType: '小团队',
     language: 'TypeScript',
