@@ -6,9 +6,9 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 const ROWS: { tier: Tier; name: string; range: string; def: string }[] = [
   { tier: 'S', name: '顶级工程', range: '≥ 9.0 + 已验证', def: '架构、代码、测试均 ≥8，且有公开可复核证据。' },
-  { tier: 'A', name: '一流', range: '≥ 7.5 + 硬门槛', def: '代码 ≥7、测试 ≥6；暂定/已验证证据才可进入。' },
+  { tier: 'A', name: '一流', range: '≥ 7.5 + 硬门槛', def: '代码 ≥7、测试 ≥6；由工程能力与公式分数共同决定。' },
   { tier: 'B', name: '扎实有特色', range: '≥ 6.5 + 测试 ≥5', def: '工程能力已形成闭环，但证据或某些维度未达 A。' },
-  { tier: 'C', name: '有想法但单薄', range: '≥ 5.0', def: '能力有价值但证据、测试或成熟度不足；观察条目最高到 C。' },
+  { tier: 'C', name: '有想法但单薄', range: '≥ 5.0', def: '能力有价值但测试、工程完成度或成熟度不足。' },
   { tier: 'D', name: '概念验证', range: '< 5.0 / 硬失败', def: '低分或测试不足，作为研究路标而非生产推荐。' },
 ]
 
@@ -51,7 +51,7 @@ export default function TierTable() {
         ))}
       </motion.div>
       <p className="mt-4 font-mono text-xs text-ink-faint">
-        * 分数由公开公式计算；Tier 还受测试、证据状态与观察封顶影响。S 级目前空缺：没有条目同时满足
+        * 分数由公开公式计算；Tier 受工程门槛影响，S 级另需已验证证据。S 级目前空缺：没有条目同时满足
         ≥9 分、架构/代码/测试门槛及已验证证据。
       </p>
     </section>

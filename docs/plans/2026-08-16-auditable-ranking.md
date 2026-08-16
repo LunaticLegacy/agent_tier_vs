@@ -21,7 +21,7 @@
 
 **Step 2: Convert the two exported data sets to derived records so stored editorial values cannot override a computed tier.**
 
-**Step 3: Add audit records for every entry, including author disclosure and the current public repository facts for llmfetcher and Angelus.**
+**Step 3: Add audit records for every entry, including author disclosure and the current public repository facts for llmfetcher and Angelus. Relationship disclosure is informational only.**
 
 ### Task 2: Make the standards inspectable
 
@@ -54,6 +54,6 @@
 
 **Step 1: Assert that all displayed scores equal the standard formula and all tiers equal the standard classifier.**
 
-**Step 2: Assert llmfetcher is disclosed and capped at framework Tier C, and Angelus is disclosed and capped at product T3.**
+**Step 2: Superseded by `2026-08-16-remove-ranking-relationship-penalties.md`: assert disclosures are present but cannot cap either entry’s tier.**
 
 **Step 3: Run `npm run verify:ranking`, `npm run lint`, and `npm run build`.**

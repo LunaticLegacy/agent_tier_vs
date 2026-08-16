@@ -94,7 +94,7 @@ export const TIER_META_PRODUCT: Record<
   },
   T3: {
     name: '能力有限',
-    definition: '低于 T2 门槛，或因观察状态自动封顶；仅适合简单场景或研究参考',
+    definition: '低于 T2 门槛；仅适合简单场景或研究参考',
     color: '#64748B',
     label: 'TIER T3',
   },
@@ -2124,10 +2124,10 @@ const rawProducts: RawProduct[] = [
         level: 'A',
       },
       {
-        claim: '底座 llmfetcher 自身存在已知缺陷',
-        evidence: '重试机制失效 bug（代码评审，见其评审条目）',
-        impact: '上层工作台的可靠性受底座缺陷直接拖累',
-        level: 'B',
+        claim: '运行中恢复仍有边界',
+        evidence: '底层执行图可保存静态拓扑与 TaskBus 状态，但不检查点运行中的线程或应用自定义工具（仓库 README）',
+        impact: '长任务可恢复性强于多数轻量工作台，但进程中断后的精确续跑仍需应用层设计',
+        level: 'A',
       },
       {
         claim: '安装门槛高',
@@ -2143,7 +2143,7 @@ const rawProducts: RawProduct[] = [
       },
     ],
     notHigher: [
-      'Agent 能力继承自 llmfetcher，而后者重试路径存在未修复 bug；无任何公开 benchmark 或真实任务证据支持更高定级',
+      '尚无公开 benchmark 或真实任务成功率数据支持更高定级；运行中线程与自定义工具尚非可自动续跑的检查点',
       '零生态零第三方采用，生产价值未验证',
     ],
     notLower: [
@@ -2158,7 +2158,7 @@ const rawProducts: RawProduct[] = [
         verdict: 'Angelus 面向需要审计轨迹的专业场景，Manus 面向直接要结果的用户。',
       },
     ],
-    scores: { autonomy: 5, toolUse: 5, longTask: 6, context: 6, extensibility: 4, stability: 4 },
+    scores: { autonomy: 6, toolUse: 6, longTask: 7, context: 7, extensibility: 6, stability: 6 },
     keyMetrics: [
       { label: 'Star（2026-08 实测）', value: '1', level: 'A' },
       { label: '测试文件（仓库实测）', value: '21', level: 'A' },

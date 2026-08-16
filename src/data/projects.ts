@@ -188,7 +188,7 @@ const rawProjects: RawProject[] = [
     status: '活跃',
     tagline: '活跃的同步 Agent 框架：TaskBus 让 worker 原始输出不进入协调者上下文。',
     score: 7.4,
-    dimensions: { architecture: 9, code: 7, testCI: 4, docs: 8, ecosystem: 1, radical: 9 },
+    dimensions: { architecture: 9, code: 8, testCI: 7, docs: 9, ecosystem: 2, radical: 9 },
     quote: '16 个项目中唯一把隔离做到如此决绝的。',
     highlights: [
       'TaskBus 设计：worker 原始输出永不进入协调者上下文',

@@ -20,7 +20,7 @@ const STEPS = [
   },
   {
     cmd: 'RANK',
-    desc: '按总分、硬门槛、证据封顶与利益披露分类；产品仅在同赛道内排序。',
+    desc: '按总分与硬门槛分类；证据状态和利益披露公开展示但不改变 Tier。产品仅在同赛道内排序。',
     term: '$ classify --gates --evidence',
   },
 ]

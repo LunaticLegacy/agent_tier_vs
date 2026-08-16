@@ -11,8 +11,8 @@ const productFormula = Object.entries(PRODUCT_WEIGHTS)
 const rules = [
   ['01', '公式优先', '展示分数只能由公开权重计算；评语不允许人工补分。'],
   ['02', '硬门槛', '框架的代码/测试门槛与产品的稳定性门槛不满足时，不能因总分高而越级。'],
-  ['03', '证据封顶', '已验证、暂定、观察三种状态公开展示；观察条目自动封顶。'],
-  ['04', '关系披露', '评审者关联项目必须标注，且只采纳公开可复核事实。'],
+  ['03', '证据置信度', '已验证、暂定、观察三种状态公开展示；它们表达证据强度，不会自动改写分数或 Tier。'],
+  ['04', '关系披露', '评审者关联项目必须标注，且只采纳公开可复核事实；关联关系不参与评分或分级。'],
 ]
 
 export default function RankingStandards() {
@@ -23,7 +23,7 @@ export default function RankingStandards() {
         <span className="font-mono text-vs">02b /</span> 可审计排名标准
       </h2>
       <p className="mt-4 max-w-3xl leading-8 text-ink-dim">
-        这里的 Tier 是可重算分类，不是评审者对项目的“最终判词”。分数、门槛、证据状态和利益披露共同决定公开结果。
+        这里的 Tier 是可重算分类，不是评审者对项目的“最终判词”。分数与硬门槛决定 Tier；证据状态与利益披露用于说明置信度和可能偏差。
       </p>
 
       <div className="mt-10 grid gap-4 lg:grid-cols-2">

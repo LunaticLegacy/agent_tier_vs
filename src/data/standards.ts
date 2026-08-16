@@ -54,20 +54,15 @@ export function scoreProduct(scores: ProductScores): number {
   )
 }
 
-const capFrameworkTier = (tier: Tier, evidence: EvidenceStatus): Tier => {
-  if (evidence !== 'watch') return tier
-  return tier === 'S' || tier === 'A' || tier === 'B' ? 'C' : tier
-}
-
 export function classifyFramework(scores: DimensionScores, audit: RankingAudit): Tier {
   const score = scoreFramework(scores)
   let tier: Tier
 
   if (score >= 9 && scores.architecture >= 8 && scores.code >= 8 && scores.testCI >= 8 && audit.evidence === 'verified') {
     tier = 'S'
-  } else if (score >= 7.5 && scores.code >= 7 && scores.testCI >= 6 && audit.evidence !== 'watch') {
+  } else if (score >= 7.5 && scores.code >= 7 && scores.testCI >= 6) {
     tier = 'A'
-  } else if (score >= 6.5 && scores.testCI >= 5 && audit.evidence !== 'watch') {
+  } else if (score >= 6.5 && scores.testCI >= 5) {
     tier = 'B'
   } else if (score >= 5 && scores.testCI >= 4) {
     tier = 'C'
@@ -75,12 +70,7 @@ export function classifyFramework(scores: DimensionScores, audit: RankingAudit):
     tier = 'D'
   }
 
-  return capFrameworkTier(tier, audit.evidence)
-}
-
-const capProductTier = (tier: ProductTier, evidence: EvidenceStatus): ProductTier => {
-  if (evidence !== 'watch') return tier
-  return tier === 'T0' || tier === 'T1' || tier === 'T2' ? 'T3' : tier
+  return tier
 }
 
 export function classifyProduct(scores: ProductScores, audit: RankingAudit): ProductTier {
@@ -89,7 +79,7 @@ export function classifyProduct(scores: ProductScores, audit: RankingAudit): Pro
 
   if (score >= 8.2 && scores.stability >= 7 && audit.evidence === 'verified') {
     tier = 'T0'
-  } else if (score >= 7 && scores.stability >= 6 && audit.evidence !== 'watch') {
+  } else if (score >= 7 && scores.stability >= 6) {
     tier = 'T1'
   } else if (score >= 5.5) {
     tier = 'T2'
@@ -97,7 +87,7 @@ export function classifyProduct(scores: ProductScores, audit: RankingAudit): Pro
     tier = 'T3'
   }
 
-  return capProductTier(tier, audit.evidence)
+  return tier
 }
 
 const reviewDate = '2026-08-16'
@@ -107,16 +97,16 @@ const defaultFrameworkAudit = (slug: string): RankingAudit => ({
   reviewedAt: reviewDate,
   snapshot: '代码结构复核；公开 commit 快照待补档',
   sources: [],
-  disclosure: `条目 ${slug} 尚未附公开证据包；不得进入 S 级。`,
+  disclosure: `条目 ${slug} 尚未附公开证据包；因此不满足 S 级所需的「已验证」证据条件。`,
 })
 
 const frameworkAudits: Record<string, RankingAudit> = {
   llmfetcher: {
-    evidence: 'watch',
+    evidence: 'provisional',
     reviewedAt: reviewDate,
-    snapshot: 'GitHub main；README 标注 active development，未发布 release/package 快照',
+    snapshot: 'GitHub main；79 commits；CI 工作流、离线回归测试和公开 API/架构文档均可复核；尚无独立任务评测或发布包',
     sources: [{ label: 'LunaticLegacy/llmfetcher', url: 'https://github.com/LunaticLegacy/llmfetcher' }],
-    disclosure: '作者关联项目：仅采纳公开仓库事实；证据状态封顶为「观察」，不得进入 A/B/S。',
+    disclosure: '维护者关联项目：已披露；评分、门槛与 Tier 不因该关系改变，仅采纳公开可复核事实。',
   },
 }
 
@@ -154,11 +144,11 @@ const productAudits: Record<string, RankingAudit> = {
     ],
   },
   angelus: {
-    evidence: 'watch',
+    evidence: 'provisional',
     reviewedAt: reviewDate,
-    snapshot: 'GitHub main；124 commits；llmfetcher 子模块固定 e1fe5f6；无 release 或第三方任务评测',
+    snapshot: 'GitHub main；124 commits；CI、测试、持久化会话与可重放执行轨迹可复核；llmfetcher 子模块固定 e1fe5f6；尚无独立任务评测或发布包',
     sources: [{ label: 'LunaticLegacy/angelus', url: 'https://github.com/LunaticLegacy/angelus' }],
-    disclosure: '作者关联项目：仅采纳公开仓库事实；证据状态封顶为「观察」，不得进入 T0/T1/T2。',
+    disclosure: '维护者关联项目：已披露；评分、门槛与 Tier 不因该关系改变，仅采纳公开可复核事实。',
   },
 }
 
@@ -188,6 +178,6 @@ export const EVIDENCE_STATUS_META: Record<EvidenceStatus, { label: string; color
   watch: {
     label: '观察',
     color: '#F5C518',
-    description: '证据、成熟度或利益关系需要额外审视；高 Tier 自动封顶。',
+    description: '证据或成熟度需要额外审视；仅表达当前置信度，不会自动改变分数或 Tier。',
   },
 }
