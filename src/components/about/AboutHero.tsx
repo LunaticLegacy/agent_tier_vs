@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 
 const TITLE = '评审方法论'
-const STATUS = ['STATUS: PUBLISHED', 'SCOPE: 17 repos', 'METHOD: full-code-read']
+const STATUS = ['STATUS: AUDITABLE', 'SCOPE: 17 frameworks + 24 products', 'METHOD: formula + gates + evidence']
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 

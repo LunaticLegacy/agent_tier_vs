@@ -7,13 +7,13 @@ const PRINCIPLES = [
   '代码 > README',
   '星数仅是六维之一',
   '停更不等于无价值（标 ARCHIVED 而非除名）',
-  '个人项目与官方项目同尺度量',
+  '关联项目必须披露，且自动进入证据封顶流程',
 ]
 
 const DISCLAIMER = [
   '数据为 2026-08 评审时点快照，星数随时间漂移。',
-  '评分含主观裁决，不构成投资/选型唯一依据。',
-  '若项目有重大更新，欢迎提交复核请求。',
+  '评分由公式、硬门槛和证据状态共同决定；评语不改变分数。',
+  '若项目有重大更新，可提交带版本与证据链接的复核请求。',
 ]
 
 export default function Principles() {
@@ -44,7 +44,7 @@ export default function Principles() {
             </ul>
             {ci === 1 && (
               <a
-                href="https://github.com"
+                href="https://github.com/LunaticLegacy/agent_tier_vs/issues/new"
                 target="_blank"
                 rel="noreferrer"
                 className="mt-6 inline-flex items-center gap-2 border border-line-bright px-4 py-2 text-sm font-bold text-ink transition-colors hover:border-vs hover:text-vs"

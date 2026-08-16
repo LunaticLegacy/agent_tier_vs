@@ -15,8 +15,8 @@ import { cn } from '@/lib/utils'
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
-function TypewriterLine() {
-  const text = '$ review --target=products --tracks=5 --date=2026.08 → 20 ENTRIES'
+function TypewriterLine({ count }: { count: number }) {
+  const text = `$ review --target=products --tracks=5 --date=2026.08 → ${count} ENTRIES`
   return (
     <span className="font-mono text-sm text-ink-faint" aria-label={text}>
       {text.split('').map((ch, i) => (
@@ -150,7 +150,7 @@ export default function Products() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                [20 PRODUCTS / 5 TRACKS]
+              [{products.length} PRODUCTS / 5 TRACKS]
               </motion.span>
             </div>
             <motion.p
@@ -164,7 +164,7 @@ export default function Products() {
               C 用户反馈 / D 营销文案），未确认的信息如实标注「未确认」。
             </motion.p>
           </div>
-          <TypewriterLine />
+          <TypewriterLine count={products.length} />
         </div>
       </header>
 
@@ -206,7 +206,7 @@ export default function Products() {
             })}
           </div>
           <span className="ml-auto font-mono text-xs text-ink-faint">
-            显示 {filtered.length} / 20
+            显示 {filtered.length} / {products.length}
           </span>
         </div>
       </motion.div>

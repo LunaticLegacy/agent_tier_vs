@@ -1,73 +1,102 @@
-# React + TypeScript + Vite
+# Agent Tier VS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+一个面向 AI Agent 框架与产品的可审计分级站点。它不把评语当作排名依据：公开展示的分数只能由固定权重计算，Tier 还必须通过工程/稳定性门槛与证据状态检查。
 
-Currently, two official plugins are available:
+评审快照：`2026-08-16`
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 覆盖范围
 
-## React Compiler
+- 17 个可导入的 Agent 框架：架构、代码、测试与 CI、文档 DX、生态、思想激进度。
+- 24 个完整 Agent 产品：编程、通用、深度研究、浏览器/计算机操控、多智能体五条赛道。
+- 产品排名仅在**同赛道、同 Tier**内有效；不把深度研究 Agent 与 coding agent 伪装成同一条跑道上的名次。
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+当前没有框架 S 级，也没有产品 T0：新标准不会为了榜单好看而填补最高等级。
 
-## Expanding the ESLint configuration
+## 分级标准
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 框架榜
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+综合分由六维固定加权得到：
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+| 维度 | 权重 |
+| --- | ---: |
+| 架构设计 | 25% |
+| 代码质量 | 20% |
+| 测试与 CI | 15% |
+| 文档 DX | 15% |
+| 生态热度 | 15% |
+| 思想激进度 | 10% |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **S**：总分 ≥ 9，架构/代码/测试均 ≥ 8，且证据为「已验证」。
+- **A**：总分 ≥ 7.5，代码 ≥ 7、测试 ≥ 6，且不是「观察」条目。
+- **B**：总分 ≥ 6.5，测试 ≥ 5，且不是「观察」条目。
+- **C**：总分 ≥ 5，测试 ≥ 4；「观察」条目最高只能到 C。
+- **D**：其余情况，包括测试硬失败。
+
+### 产品榜
+
+综合分同样固定计算：自主执行 15%、工具调用 15%、长任务 20%、上下文管理 15%、扩展性 15%、稳定性 20%。
+
+- **T0**：总分 ≥ 8.2、稳定性 ≥ 7、证据为「已验证」。
+- **T1**：总分 ≥ 7、稳定性 ≥ 6，且不是「观察」条目。
+- **T2**：总分 ≥ 5.5。
+- **T3**：其余情况，或因「观察」状态自动封顶。
+
+## 证据与利益披露
+
+每个条目都会显示评审日期、快照说明和证据状态：
+
+- **已验证**：有直接、公开可复核的外部证据。
+- **暂定**：公开资料足以形成初判，但缺少完整版本锁定或独立复现实测。
+- **观察**：证据、成熟度或利益关系需要额外审视；高 Tier 自动封顶。
+
+llmfetcher 与 Angelus 是维护者关联项目，因此都明确标为「观察」。它们只使用公开仓库事实作为证据，不能进入高 Tier：llmfetcher 位于框架榜 C，Angelus 位于产品榜 T3。
+
+OpenClaw 与 Hermes Agent 已加入通用 Agent 赛道，当前均为 T1。它们的功能、部署路径和安全边界分别链接至官方文档/仓库与独立安全资料；常驻高权限 Agent 必须经过最小权限、审批和隔离治理后才适合真实环境。
+
+## 本地运行
+
+需要 Node.js 22+。
+
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+构建生产版本：
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build
 ```
+
+校验分级数据是否仍由标准公式派生，并确认作者关联项目与新增产品存在：
+
+```bash
+npm run verify:ranking
+```
+
+`npm run lint` 当前会报告若干既有的粒子动画和 shadcn UI 模板规则问题；它们不属于排名数据或此次可审计规则的校验范围。
+
+## 项目结构
+
+```text
+src/data/standards.ts       # 权重、硬门槛、证据封顶、审计元数据
+src/data/projects.ts        # 框架原始记录 → 标准化派生结果
+src/data/products.ts        # 产品原始记录 → 按赛道的标准化派生结果
+src/components/about/       # 方法论与标准页面
+src/pages/ProjectDetail.tsx # 框架条目与审计信息
+src/pages/ProductDetail.tsx # 产品条目与审计信息
+scripts/verify-ranking.mjs  # 排名派生与关键披露校验
+demos/                      # 代表性框架的最小示例
+```
+
+## 更新条目的要求
+
+新增或复核条目时，请同时提交：
+
+1. 官方仓库或产品 URL；
+2. 评审日期与可定位的版本/提交快照；
+3. 对应优点、短板和关键指标的直接证据链接；
+4. 与项目或厂商的任何利益关系披露。
+
+没有这些信息的条目可以保留为观察对象，但不能被包装为高可信度推荐。

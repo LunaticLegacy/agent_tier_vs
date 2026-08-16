@@ -16,6 +16,7 @@ import {
   PRODUCT_TIER_ORDER,
   TIER_META_PRODUCT,
   countByTier,
+  products,
 } from '@/data/products'
 
 const HeroParticles = lazy(() => import('@/components/home/HeroParticles'))
@@ -267,7 +268,7 @@ function ProductsTeaser() {
         />
         <p className="mono-label text-ink-faint">NEW · 产品榜</p>
         <h2 className="mt-3 text-3xl font-bold tracking-tight md:text-4xl">
-          不止框架——<span className="text-vs">20 个主流 AI Agent 产品</span>的 T0–T3 评审
+          不止框架——<span className="text-vs">{products.length} 个主流 AI Agent 产品</span>的 T0–T3 评审
         </h2>
         <p className="mt-4 max-w-2xl text-ink-dim">
           评估对象是 Model + Harness + 工具 + Runtime 的完整系统，不是模型本身。覆盖编程、通用、

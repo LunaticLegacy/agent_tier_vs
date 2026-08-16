@@ -7,6 +7,7 @@ import RadarChart from '@/components/project/RadarChart'
 import QuoteBlock from '@/components/project/QuoteBlock'
 import ScoreBars from '@/components/project/ScoreBars'
 import CountUp from '@/components/wiki/CountUp'
+import AuditBadge from '@/components/AuditBadge'
 import { cn } from '@/lib/utils'
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -119,6 +120,7 @@ export default function ProjectDetail() {
               >
                 {project.status}
               </span>
+              <AuditBadge audit={project.audit} />
             </motion.div>
           </div>
 
@@ -144,6 +146,7 @@ export default function ProjectDetail() {
             <p className="mono-label mt-1" style={{ color: meta.color }}>
               {meta.label} · {meta.name}
             </p>
+            <p className="mt-2 font-mono text-xs text-ink-faint">标准公式自动计算 · {project.audit.reviewedAt}</p>
             <div className="mt-4">
               <RadarChart dimensions={project.dimensions} color={meta.color} />
             </div>
@@ -241,7 +244,7 @@ export default function ProjectDetail() {
             className="mt-8 overflow-hidden border border-line bg-bg-inset"
           >
             <p className="border-b border-line px-4 py-2 font-mono text-xs text-ink-faint">
-              $ git clone --depth 1 github.com/{project.slug} && wc -l src/** | sort -n
+              $ audit --entry={project.slug} --snapshot={project.audit.reviewedAt}
             </p>
             <div className="space-y-1 px-4 py-4 font-mono text-sm text-ink-dim">
               <p><span className="mr-4 inline-block w-6 text-right text-ink-faint">1</span>tier      = &quot;{project.tier}&quot;  <span className="text-ink-faint"># {meta.name}</span></p>
@@ -249,6 +252,27 @@ export default function ProjectDetail() {
               <p><span className="mr-4 inline-block w-6 text-right text-ink-faint">3</span>stars     = {project.stars}    <span className="text-ink-faint"># 评审时点快照</span></p>
               <p><span className="mr-4 inline-block w-6 text-right text-ink-faint">4</span>status    = &quot;{project.status}&quot;</p>
             </div>
+          </motion.div>
+
+          <motion.div {...fadeUp(0.2)} className="mt-5 border border-line bg-bg-inset p-4 text-sm leading-7 text-ink-dim">
+            <div className="flex flex-wrap items-center gap-3">
+              <AuditBadge audit={project.audit} />
+              <span className="font-mono text-xs text-ink-faint">快照：{project.audit.snapshot}</span>
+            </div>
+            {project.audit.disclosure && <p className="mt-3 text-tier-s">披露：{project.audit.disclosure}</p>}
+            {project.audit.sources.length > 0 && (
+              <p className="mt-3">
+                公开证据：{' '}
+                {project.audit.sources.map((source, index) => (
+                  <span key={source.url}>
+                    {index > 0 && ' · '}
+                    <a href={source.url} target="_blank" rel="noreferrer" className="text-vs hover:underline">
+                      {source.label}
+                    </a>
+                  </span>
+                ))}
+              </p>
+            )}
           </motion.div>
 
           <motion.h2 {...fadeUp()} className="mt-14 text-2xl font-bold">

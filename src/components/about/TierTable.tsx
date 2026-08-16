@@ -5,11 +5,11 @@ import type { Tier } from '@/data/projects'
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
 const ROWS: { tier: Tier; name: string; range: string; def: string }[] = [
-  { tier: 'S', name: '顶级工程', range: '≥ 9.0', def: '架构、质量、测试三线全优，可作行业基准。' },
-  { tier: 'A', name: '一流', range: '8.0 – 8.9', def: '可托付生产，各有绝活，短板不致命。' },
-  { tier: 'B', name: '扎实有特色', range: '6.5 – 7.9', def: '一招鲜吃透一件事，其余平庸但诚实。' },
-  { tier: 'C', name: '有想法但单薄', range: '5.0 – 6.4', def: '点子锋利，身板单薄，生态/维护堪忧。' },
-  { tier: 'D', name: '概念验证', range: '< 5.0', def: '思想先行或已停更，仅作路标价值。' },
+  { tier: 'S', name: '顶级工程', range: '≥ 9.0 + 已验证', def: '架构、代码、测试均 ≥8，且有公开可复核证据。' },
+  { tier: 'A', name: '一流', range: '≥ 7.5 + 硬门槛', def: '代码 ≥7、测试 ≥6；暂定/已验证证据才可进入。' },
+  { tier: 'B', name: '扎实有特色', range: '≥ 6.5 + 测试 ≥5', def: '工程能力已形成闭环，但证据或某些维度未达 A。' },
+  { tier: 'C', name: '有想法但单薄', range: '≥ 5.0', def: '能力有价值但证据、测试或成熟度不足；观察条目最高到 C。' },
+  { tier: 'D', name: '概念验证', range: '< 5.0 / 硬失败', def: '低分或测试不足，作为研究路标而非生产推荐。' },
 ]
 
 export default function TierTable() {
@@ -51,9 +51,8 @@ export default function TierTable() {
         ))}
       </motion.div>
       <p className="mt-4 font-mono text-xs text-ink-faint">
-        * 分数为门槛，裁决为评审合议；同 Tier 内排名按编号序。S 级目前空缺：受评 17
-        个框架无一同时达到顶级工程与顶级生态（原 S 级 deepseek-harness
-        经重新定级为 Agent 运行时产品，移入产品榜 T1）。
+        * 分数由公开公式计算；Tier 还受测试、证据状态与观察封顶影响。S 级目前空缺：没有条目同时满足
+        ≥9 分、架构/代码/测试门槛及已验证证据。
       </p>
     </section>
   )

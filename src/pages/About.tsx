@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import AboutHero from '@/components/about/AboutHero'
 import ProcessSteps from '@/components/about/ProcessSteps'
 import DimensionAccordion from '@/components/about/DimensionAccordion'
+import RankingStandards from '@/components/about/RankingStandards'
 import TierTable from '@/components/about/TierTable'
 import ProductTierTable from '@/components/about/ProductTierTable'
 import Principles from '@/components/about/Principles'
@@ -59,6 +60,7 @@ export default function About() {
       <AboutHero />
       <ProcessSteps />
       <DimensionAccordion />
+      <RankingStandards />
       <TierTable />
       <ProductTierTable />
       <Principles />

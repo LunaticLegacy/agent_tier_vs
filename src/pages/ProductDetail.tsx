@@ -13,6 +13,7 @@ import {
 import { ProductTierBadge } from '@/components/TierBadge'
 import ProductRadarChart from '@/components/product/ProductRadarChart'
 import EvidenceBadge from '@/components/product/EvidenceBadge'
+import AuditBadge from '@/components/AuditBadge'
 import { cn } from '@/lib/utils'
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
@@ -131,7 +132,9 @@ export default function ProductDetail() {
   const idx = sortedProducts.findIndex((p) => p.slug === product.slug)
   const prev = sortedProducts[(idx - 1 + sortedProducts.length) % sortedProducts.length]
   const next = sortedProducts[(idx + 1) % sortedProducts.length]
-  const sameTier = products.filter((p) => p.tier === product.tier).sort((a, b) => a.rank - b.rank)
+  const sameTier = products
+    .filter((p) => p.tier === product.tier && p.category === product.category)
+    .sort((a, b) => a.rank - b.rank)
 
   return (
     <div className="pb-24">
@@ -186,6 +189,7 @@ export default function ProductDetail() {
               </span>
               <span className="text-ink-faint">·</span>
               <span>评估于 {product.evaluatedAt}</span>
+              <AuditBadge audit={product.audit} />
             </motion.div>
             <motion.dl
               className="mt-6 grid gap-3 border border-line bg-bg-raised p-5 font-mono text-sm"
@@ -217,6 +221,7 @@ export default function ProductDetail() {
             <p className="mono-label" style={{ color: meta.color }}>
               {meta.label} · {meta.name}
             </p>
+            <p className="mt-2 font-mono text-2xl text-ink">{product.score.toFixed(1)}<span className="text-sm text-ink-faint"> /10 标准分</span></p>
             <p className="mt-3 text-sm leading-relaxed text-ink-dim">{product.verdict}</p>
             <p className="mt-4 border-t border-line pt-3 font-mono text-xs text-ink-faint">
               定级置信度：<span className="text-ink">{CONFIDENCE[product.tier]}</span>
@@ -235,6 +240,29 @@ export default function ProductDetail() {
           </motion.aside>
         </div>
       </header>
+
+      <section className="container-site mt-10">
+        <div className="border border-line bg-bg-inset p-4 text-sm leading-7 text-ink-dim">
+          <div className="flex flex-wrap items-center gap-3">
+            <AuditBadge audit={product.audit} />
+            <span className="font-mono text-xs text-ink-faint">快照：{product.audit.snapshot}</span>
+          </div>
+          {product.audit.disclosure && <p className="mt-3 text-tier-s">披露：{product.audit.disclosure}</p>}
+          {product.audit.sources.length > 0 && (
+            <p className="mt-3">
+              公开证据：{' '}
+              {product.audit.sources.map((source, index) => (
+                <span key={source.url}>
+                  {index > 0 && ' · '}
+                  <a href={source.url} target="_blank" rel="noreferrer" className="text-vs hover:underline">
+                    {source.label}
+                  </a>
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
+      </section>
 
       {/* S1 主要优势 / 主要短板 */}
       <section className="container-site mt-20 grid gap-10 md:grid-cols-2">
@@ -361,7 +389,7 @@ export default function ProductDetail() {
       {/* S6 同级对照 */}
       <section className="container-site mt-20">
         <motion.h2 {...fadeUp()} className="mb-8 text-2xl font-bold">
-          <span className="mono-label mr-3 text-ink-faint">04 /</span>同级对照
+          <span className="mono-label mr-3 text-ink-faint">04 /</span>同赛道同级对照
         </motion.h2>
         <motion.div {...fadeUp(0.06)} className="overflow-x-auto">
           <table className="w-full border border-line font-mono text-sm">

@@ -1,10 +1,13 @@
+import { auditForProduct, classifyProduct, scoreProduct } from './standards'
+import type { RankingAudit } from './standards'
+
 // 产品榜数据：T0–T3 分级的主流 AI Agent 产品评审
 // 内容来源：/mnt/agents/output/research/prod_*.md 五份调研报告（2026-08-14）
 // 证据等级：A=官方文档/benchmark；B=独立第三方评测；C=大量用户反馈/issues；D=营销文案
 
 export type ProductTier = 'T0' | 'T1' | 'T2' | 'T3'
 export type ProductCategory = 'coding' | 'general' | 'research' | 'browser' | 'multi'
-export type EvidenceLevel = 'A' | 'B' | 'C' | 'D' | 'A/D' | 'B/C' | 'D/B'
+export type EvidenceLevel = 'A' | 'B' | 'C' | 'D' | 'A/B' | 'A/D' | 'B/C' | 'D/B'
 
 export interface ProductScores {
   autonomy: number // 自主执行
@@ -59,9 +62,13 @@ export interface Product {
   notLower: string[] // 为什么不是更低 Tier
   headToHead: HeadToHead[] // 最多 3 个
   scores: ProductScores
+  score: number // 标准权重自动计算的综合分
   keyMetrics: KeyMetric[]
   sources: Source[]
+  audit: RankingAudit
 }
+
+type RawProduct = Omit<Product, 'score' | 'audit'>
 
 export const TIER_META_PRODUCT: Record<
   ProductTier,
@@ -69,25 +76,25 @@ export const TIER_META_PRODUCT: Record<
 > = {
   T0: {
     name: '第一梯队',
-    definition: '当前综合能力与生态处于行业最前列，但不等于可安全无人值守',
+    definition: '≥8.2、稳定性 ≥7 且证据已验证；不等于可安全无人值守',
     color: '#F5C518',
     label: 'TIER T0',
   },
   T1: {
     name: '强力成熟',
-    definition: '能力成熟可用，存在已验证的短板或信任减分项',
+    definition: '≥7、稳定性 ≥6；能力成熟但仍有已验证短板或信任减分项',
     color: '#A78BFA',
     label: 'TIER T1',
   },
   T2: {
     name: '可用有限制',
-    definition: '特定场景可用，但可靠性、成本或证据不足以托付关键任务',
+    definition: '≥5.5；特定场景可用，但可靠性、成本或证据不足以托付关键任务',
     color: '#38BDF8',
     label: 'TIER T2',
   },
   T3: {
     name: '能力有限',
-    definition: '能力浅、证据弱或已衰退，仅适合简单场景或研究参考',
+    definition: '低于 T2 门槛，或因观察状态自动封顶；仅适合简单场景或研究参考',
     color: '#64748B',
     label: 'TIER T3',
   },
@@ -149,7 +156,7 @@ export const EVIDENCE_META: Record<
   },
 }
 
-export const products: Product[] = [
+const rawProducts: RawProduct[] = [
   {
     slug: 'claude-code',
     name: 'Claude Code',
@@ -851,6 +858,132 @@ export const products: Product[] = [
       { name: 'OpenAI 官方基准汇总（smol.ai 转引）', url: 'https://www.smol.ai/' },
       { name: 'GitHub issue #35032（长任务压缩回归）', url: 'https://github.com/openai/codex/issues/35032' },
       { name: 'actuia 网站兼容性报道', url: 'https://actuia.com/cn/news/chatgpt-agent/' },
+    ],
+  },
+  {
+    slug: 'openclaw',
+    name: 'OpenClaw',
+    vendor: 'OpenClaw Foundation',
+    category: 'general',
+    tier: 'T1',
+    rank: 1,
+    tagline: '自托管、多渠道的常驻个人 Agent Gateway；能力面极广，但高权限默认部署必须先做安全加固。',
+    model: '模型无关：可配置多家 provider 与本地服务',
+    pricing: '开源 MIT；自行承担模型、托管与渠道成本',
+    evaluatedAt: '2026-08-16',
+    verdict:
+      'OpenClaw 把消息渠道、会话/记忆、多 Agent 路由、工具、技能、定时任务与节点设备整合为一个自托管 Gateway，覆盖面和部署成熟度都属第一梯队。它不是“无风险的个人助理”：常驻记忆、工具执行、凭据和插件供应链叠加，必须使用 allowlist、最小权限、隔离环境和人工审批。按标准定 T1：功能与生态强，但安全默认值与真实任务可靠性不足以获 T0。',
+    strengths: [
+      {
+        claim: '多渠道与常驻运行时覆盖完整',
+        evidence: '官方文档列出 Discord、iMessage、Slack、Telegram、WhatsApp 等渠道，并提供 Gateway、Control UI、会话、记忆与多 Agent 路由（A）。',
+        impact: '可把个人 Agent 从单一聊天窗口变成跨设备、跨渠道的长期服务。',
+        level: 'A',
+      },
+      {
+        claim: '自托管且模型无关',
+        evidence: '官方文档说明 Gateway 可运行在本机或服务器，支持 provider 配置、工具、技能、cron 与插件渠道（A）。',
+        impact: '数据控制和模型选择权留在部署者手中。',
+        level: 'A',
+      },
+    ],
+    weaknesses: [
+      {
+        claim: '持久记忆与高权限工具扩大攻击面',
+        evidence: 'Cloud Security Alliance 的研究指出同类常驻 Agent 的凭据、工具、记忆与插件组合需要显式加固与最小权限治理（B）。',
+        impact: '不能把默认安装视作企业级安全配置。',
+        level: 'B',
+      },
+      {
+        claim: '缺少统一、独立的端到端任务成功率',
+        evidence: '公开资料主要证明功能和部署能力，未提供可复现的跨任务成功率基准（A/B）。',
+        impact: '功能丰富不等于可安全无人值守地完成真实工作。',
+        level: 'A/B',
+      },
+    ],
+    notHigher: ['安全加固依赖部署者，常驻高权限 Agent 的默认风险不可忽略。', '缺少统一的独立真实任务成功率证据。'],
+    notLower: ['Gateway、渠道、会话、节点和工具能力是可公开复核的完整运行时。', '自托管与多 provider 架构具备真实的长期自动化价值。'],
+    headToHead: [
+      {
+        opponent: 'hermes-agent',
+        myEdge: ['渠道 Gateway 与设备节点整合更成熟', '运行时与插件生态广'],
+        theirEdge: ['内建学习循环与技能自我改进', '隔离子代理与多种执行后端更突出'],
+        verdict: '两者均为需硬化部署的常驻个人 Agent；OpenClaw 偏连接与编排，Hermes 偏学习与自治。',
+      },
+    ],
+    scores: { autonomy: 9, toolUse: 9, longTask: 7, context: 8, extensibility: 9, stability: 6 },
+    keyMetrics: [
+      { label: '运行形态', value: '自托管 Gateway + Control UI + 移动节点', level: 'A' },
+      { label: '主要能力', value: '渠道 / 会话 / 记忆 / 工具 / cron / 多 Agent', level: 'A' },
+      { label: '安全部署', value: '需 allowlist、最小权限与隔离', level: 'B' },
+    ],
+    sources: [
+      { name: 'OpenClaw 官方文档', url: 'https://docs.openclaw.ai/' },
+      { name: 'OpenClaw GitHub 仓库', url: 'https://github.com/openclaw/openclaw' },
+      { name: 'Cloud Security Alliance 研究说明', url: 'https://labs.cloudsecurityalliance.org/wp-content/uploads/2026/05/CSA_research_note_hermes_agent_CVEs_20260504-csa-styled.pdf' },
+    ],
+  },
+  {
+    slug: 'hermes-agent',
+    name: 'Hermes Agent',
+    vendor: 'Nous Research',
+    category: 'general',
+    tier: 'T1',
+    rank: 2,
+    tagline: '带持久记忆、技能自生成和隔离子代理的自我改进 Agent；能力高，但默认高权限配置必须经过安全治理。',
+    model: '模型无关：Nous Portal、OpenRouter、OpenAI 与自定义 endpoint',
+    pricing: 'MIT 开源；Nous Portal 为可选托管模型与工具订阅',
+    evaluatedAt: '2026-08-16',
+    verdict:
+      'Hermes 的差异点是闭环学习：任务经验可沉淀为技能、跨会话记忆可检索、子代理可隔离并行，且支持多平台 Gateway、MCP、cron 与多种沙盒后端。官方能力面很强，但独立安全审计已指出默认配置下的严重风险；公开材料也没有统一的真实任务成功率。按标准定 T1：适合懂隔离和权限治理的高级用户，不应直接以默认高权限运行在敏感环境。',
+    strengths: [
+      {
+        claim: '学习与记忆闭环是核心差异',
+        evidence: '官方仓库说明其会从复杂任务创建和改进技能，并提供跨会话检索与用户模型（A）。',
+        impact: '长期使用时可减少重复配置与上下文重建成本。',
+        level: 'A',
+      },
+      {
+        claim: '多平台与隔离执行面完整',
+        evidence: '官方仓库列出消息 Gateway、隔离子代理、MCP、cron 与 local/Docker/SSH/Singularity/Modal 等执行后端（A）。',
+        impact: '适用于常驻自动化与多工作流编排，而非一次性对话。',
+        level: 'A',
+      },
+    ],
+    weaknesses: [
+      {
+        claim: '默认安全配置存在已披露的严重风险',
+        evidence: 'Cloud Security Alliance 汇总的独立审计提到默认配置中的 Critical/High 级问题及多个已披露漏洞（B）。',
+        impact: '必须在最小权限、审批、隔离和供应链校验下运行。',
+        level: 'B',
+      },
+      {
+        claim: '任务可靠性缺少独立基准',
+        evidence: '公开材料主要来自官方文档与仓库，尚无统一、可复现的真实任务成功率证据（A/B）。',
+        impact: '不能把“自我改进”营销表述直接等同于任务质量保证。',
+        level: 'A/B',
+      },
+    ],
+    notHigher: ['默认高权限 Agent 的安全风险需要硬化后才能接受。', '没有统一独立的端到端任务成功率和长期稳定性数据。'],
+    notLower: ['技能、记忆、子代理、Gateway 与多后端执行能力均有公开实现与文档。', '活跃社区和跨平台部署能力已超过概念验证阶段。'],
+    headToHead: [
+      {
+        opponent: 'openclaw',
+        myEdge: ['学习循环与跨会话技能沉淀', '隔离子代理与多种执行后端'],
+        theirEdge: ['多渠道 Gateway 与设备节点覆盖', '连接器生态与部署路径'],
+        verdict: '两者都需要安全治理；Hermes 的优势是长期学习与隔离执行，OpenClaw 的优势是连接和个人操作系统式编排。',
+      },
+    ],
+    scores: { autonomy: 8, toolUse: 9, longTask: 8, context: 9, extensibility: 8, stability: 6 },
+    keyMetrics: [
+      { label: '运行形态', value: 'CLI / Gateway / Desktop / 多消息平台', level: 'A' },
+      { label: '执行后端', value: 'local / Docker / SSH / Singularity / Modal 等', level: 'A' },
+      { label: '安全结论', value: '默认部署需显式硬化', level: 'B' },
+    ],
+    sources: [
+      { name: 'NousResearch/hermes-agent', url: 'https://github.com/NousResearch/hermes-agent' },
+      { name: 'Hermes Agent 官方页', url: 'https://nousresearch.net/hermes-agent/' },
+      { name: 'Cloud Security Alliance 研究说明', url: 'https://labs.cloudsecurityalliance.org/wp-content/uploads/2026/05/CSA_research_note_hermes_agent_CVEs_20260504-csa-styled.pdf' },
     ],
   },
   {
@@ -2035,6 +2168,28 @@ export const products: Product[] = [
     sources: [{ name: 'GitHub 仓库', url: 'https://github.com/LunaticLegacy/angelus' }],
   },
 ]
+
+/**
+ * 评审文案是原始材料；公开榜单只使用本模块的标准权重、门槛与证据上限。
+ * 排名只在「赛道 + Tier」内有效，避免把不同任务类型伪装成同一条跑道。
+ */
+export const products: Product[] = rawProducts
+  .map((product) => {
+    const audit = auditForProduct(product.slug)
+    return {
+      ...product,
+      score: scoreProduct(product.scores),
+      tier: classifyProduct(product.scores, audit),
+      audit,
+    }
+  })
+  .sort((a, b) => a.category.localeCompare(b.category) || b.score - a.score || a.slug.localeCompare(b.slug))
+  .map((product, _, all) => ({
+    ...product,
+    rank: all
+      .filter((candidate) => candidate.category === product.category && candidate.tier === product.tier)
+      .findIndex((candidate) => candidate.slug === product.slug) + 1,
+  }))
 
 export const productTierGroups: { tier: ProductTier; items: Product[] }[] =
   PRODUCT_TIER_ORDER.map((tier) => ({

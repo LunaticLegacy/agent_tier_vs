@@ -1,3 +1,6 @@
+import { auditForFramework, classifyFramework, scoreFramework } from './standards'
+import type { RankingAudit } from './standards'
+
 export type Tier = 'S' | 'A' | 'B' | 'C' | 'D'
 
 export interface DimensionScores {
@@ -28,7 +31,10 @@ export interface Project {
   highlights: string[]
   weaknesses: string[]
   repoUrl?: string // 仓库地址（如有）
+  audit: RankingAudit
 }
+
+type RawProject = Omit<Project, 'audit'>
 
 export const TIER_META: Record<
   Tier,
@@ -52,7 +58,7 @@ export const DIMENSION_LABELS: { key: keyof DimensionScores; label: string }[] =
   { key: 'radical', label: '思想激进度' },
 ]
 
-export const projects: Project[] = [
+const rawProjects: RawProject[] = [
   {
     slug: 'chidori',
     name: 'Chidori',
@@ -177,10 +183,10 @@ export const projects: Project[] = [
     maintainerType: '个人',
     language: 'Python',
     license: 'AGPL-3.0',
-    stars: '2',
-    starValue: 2,
+    stars: '1',
+    starValue: 1,
     status: '活跃',
-    tagline: 'TaskBus：worker 输出永不进协调者上下文。',
+    tagline: '活跃的同步 Agent 框架：TaskBus 让 worker 原始输出不进入协调者上下文。',
     score: 7.4,
     dimensions: { architecture: 9, code: 7, testCI: 4, docs: 8, ecosystem: 1, radical: 9 },
     quote: '16 个项目中唯一把隔离做到如此决绝的。',
@@ -189,7 +195,8 @@ export const projects: Project[] = [
       'DAG 动态变更 + 协作式停止协议，语义严谨',
       '文档纪律罕见地好',
     ],
-    weaknesses: ['重试机制实际失效（async 残留 bug）', 'RAG/主循环零测试', 'god class'],
+    weaknesses: ['无 MCP / 多模态 / 运行中恢复', '任务路由与中间件仍需业务侧实现', '社区采用与独立验证尚不足'],
+    repoUrl: 'https://github.com/LunaticLegacy/llmfetcher',
   },
   {
     slug: 'atomic-agents',
@@ -404,6 +411,23 @@ export const projects: Project[] = [
     weaknesses: ['2024-11 后无提交', '能力被新一代 coding agent 全面覆盖'],
   },
 ]
+
+/**
+ * 展示层只读取这一份派生结果：手填的旧分数/层级不会覆盖公开公式。
+ * 同分时保留 slug 稳定排序，避免展示顺序因运行环境而漂移。
+ */
+export const projects: Project[] = rawProjects
+  .map((project) => {
+    const audit = auditForFramework(project.slug)
+    return {
+      ...project,
+      score: scoreFramework(project.dimensions),
+      tier: classifyFramework(project.dimensions, audit),
+      audit,
+    }
+  })
+  .sort((a, b) => b.score - a.score || a.slug.localeCompare(b.slug))
+  .map((project, index) => ({ ...project, rank: index + 1 }))
 
 export const tierGroups: { tier: Tier; items: Project[] }[] = TIER_ORDER.map((tier) => ({
   tier,

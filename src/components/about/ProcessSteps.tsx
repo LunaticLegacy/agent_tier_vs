@@ -5,23 +5,23 @@ const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const STEPS = [
   {
     cmd: 'CLONE',
-    desc: '实际 clone 全部 17 个仓库，锁定评审时点 commit。',
-    term: '$ git log -1 --format=%H',
+    desc: '记录公开仓库、评审日期与可获得的版本快照；缺失项会降为暂定或观察。',
+    term: '$ audit snapshot --record',
   },
   {
     cmd: 'READ',
-    desc: '逐模块读代码：入口、编排核心、工具调用、错误处理、测试。',
-    term: '$ tree src/ -L 2',
+    desc: '逐模块审阅入口、编排、工具、错误处理与测试，并把可核验来源附到条目。',
+    term: '$ audit evidence --attach',
   },
   {
     cmd: 'SCORE',
-    desc: '六维打分（各 0–10），加权得综合分。',
-    term: '$ score --dims 6 --weighted',
+    desc: '六维打分（各 0–10）按公开权重计算；评语不能人工覆盖总分。',
+    term: '$ score --formula=public',
   },
   {
     cmd: 'RANK',
-    desc: '按综合分 + 评审裁决定 Tier，同 Tier 内不强行区分名次。',
-    term: '$ make tier VERDICT=final',
+    desc: '按总分、硬门槛、证据封顶与利益披露分类；产品仅在同赛道内排序。',
+    term: '$ classify --gates --evidence',
   },
 ]
 
