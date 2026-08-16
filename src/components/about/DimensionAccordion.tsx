@@ -14,7 +14,7 @@ const DIMS = [
     name: '代码质量',
     weight: 20,
     def: '类型纪律、一致性、可维护性、技术债。',
-    anchors: { high: '10 分 = 教科书级纪律', mid: '5 分 = 可读但有债', low: '1 分 = 面条式实现' },
+    anchors: { high: '10 分 = 教科书级纪律', mid: '5 分 = 可读但有债', low: '1 分 = 屎山代码' },
   },
   {
     name: '测试与CI',
